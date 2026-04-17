@@ -19,6 +19,20 @@ public class CustomerMapper {
         return entity;
     }
 
+    public static CustomerEntity toEntity(Long id, CustomerRequestDTO request) {
+        CustomerEntity entity = new CustomerEntity();
+
+        entity.setCustomerId(id);
+        entity.setFirstName(request.getFirstName());
+        entity.setMiddleName(request.getMiddleName());
+        entity.setPaternalLastName(request.getPaternalLastName());
+        entity.setMaternalLastName(request.getMaternalLastName());
+        entity.setEmail(request.getEmail());
+        entity.setShippingAddress(request.getShippingAddress());
+
+        return entity;
+    }
+
     public static CustomerResponseDTO toResponseDTO(CustomerEntity entity) {
         CustomerResponseDTO response = new CustomerResponseDTO();
 

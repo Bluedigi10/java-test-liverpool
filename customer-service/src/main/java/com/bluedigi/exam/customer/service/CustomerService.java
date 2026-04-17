@@ -34,6 +34,7 @@ public class CustomerService{
     public CustomerResponseDTO updateCustomer(Long id, CustomerRequestDTO customer) {
         CustomerEntity existingCustomer = customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
         // Update the existing customer with the new data
+        existingCustomer = CustomerMapper.toEntity(id, customer);
         return CustomerMapper.toResponseDTO(customerRepository.save(existingCustomer));
     }
 
