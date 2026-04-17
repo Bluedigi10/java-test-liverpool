@@ -5,10 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
 import com.bluedigi.exam.customer.dto.CustomerResponseDTO;
+import com.bluedigi.exam.customer.service.CustomerService;
 
-import java.util.ArrayList;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,32 +19,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
+    
+    private final CustomerService customerService;
+    
     @GetMapping
     public List<CustomerResponseDTO> getAllCustomers() {
-        List<CustomerResponseDTO> customers = new ArrayList<>();
-        return customers;
+        return customerService.getAllCustomers();
     }
     
     @GetMapping("/{id}")
-    public String getCustomerById(@PathVariable Long id) {
-        return "Cliente con ID: " + id;
+    public CustomerResponseDTO getCustomerById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @PostMapping
-    public CustomerResponseDTO createCustomer(@PathVariable String id, @RequestBody CustomerRequestDTO request) {
-        CustomerResponseDTO response = new CustomerResponseDTO();
-        
-        return response;
+    public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
+        return customerService.createCustomer(request);
     }
 
     @PutMapping("/{id}")
-    public CustomerResponseDTO updateCustomer(@PathVariable String id, @RequestBody CustomerRequestDTO request) {
-        CustomerResponseDTO response = new CustomerResponseDTO();
-        
-        return response;
+    public CustomerResponseDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerRequestDTO request) {
+        return customerService.updateCustomer(id, request);
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        Integer integerTrue = 1;
+        return integerTrue.equals(customerService.deleteCustomer(id))? "Cliente con ID: " + id + " eliminado" : "No se pudo eliminar el cliente con ID: " + id;
+    }
+
 }
