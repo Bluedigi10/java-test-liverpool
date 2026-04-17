@@ -47,9 +47,8 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
-        Integer integerTrue = 1;
-        return integerTrue.equals(customerService.deleteCustomer(id))? "Cliente con ID: " + id + " eliminado" : "No se pudo eliminar el cliente con ID: " + id;
+    public void deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
     }
 
 }

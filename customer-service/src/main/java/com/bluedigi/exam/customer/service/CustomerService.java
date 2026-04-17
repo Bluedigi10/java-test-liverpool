@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
 import com.bluedigi.exam.customer.dto.CustomerResponseDTO;
@@ -33,15 +32,14 @@ public class CustomerService{
     }
 
     public CustomerResponseDTO updateCustomer(Long id, CustomerRequestDTO customer) {
-        CustomerEntity existingCustomer = customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
+        CustomerEntity existingCustomer = getCustomerEntityById(id);
         // Update the existing customer with the new data
         return CustomerMapper.toResponseDTO(customerRepository.save(CustomerMapper.toEntity(existingCustomer, customer)));
     }
 
-    public Integer deleteCustomer(Long id) {
+    public void deleteCustomer(Long id) {
         getCustomerEntityById(id);
         customerRepository.deleteById(id);
-        return 1;
     }
     
     private CustomerEntity getCustomerEntityById(Long id) {

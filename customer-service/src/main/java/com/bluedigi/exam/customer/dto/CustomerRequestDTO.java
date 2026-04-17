@@ -1,11 +1,20 @@
 package com.bluedigi.exam.customer.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class CustomerRequestDTO {
+    @NotBlank(message = "First name is required")
     private String firstName;
     private String middleName;
+    @NotBlank(message = "Paternal last name is required")
     private String paternalLastName;
+    @NotBlank(message = "Maternal last name is required")
     private String maternalLastName;
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
     private String email;
+    @NotBlank(message = "Shipping address is required")
     private String shippingAddress;
 
     // Getters and Setters
