@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
 import com.bluedigi.exam.customer.dto.CustomerResponseDTO;
 import com.bluedigi.exam.customer.entity.CustomerEntity;
+import com.bluedigi.exam.customer.exception.CustomerException;
 import com.bluedigi.exam.customer.mappers.CustomerMapper;
 import com.bluedigi.exam.customer.repository.CustomerRepository;
 
@@ -24,7 +25,7 @@ public class CustomerService{
     }
 
     public CustomerResponseDTO getCustomerById(Long id) {
-        return CustomerMapper.toResponseDTO(customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found")));
+        return CustomerMapper.toResponseDTO(getCustomerEntityById(id));
     }
 
     public CustomerResponseDTO createCustomer(CustomerRequestDTO customer) {
@@ -34,14 +35,17 @@ public class CustomerService{
     public CustomerResponseDTO updateCustomer(Long id, CustomerRequestDTO customer) {
         CustomerEntity existingCustomer = customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
         // Update the existing customer with the new data
-        existingCustomer = CustomerMapper.toEntity(id, customer);
-        return CustomerMapper.toResponseDTO(customerRepository.save(existingCustomer));
+        return CustomerMapper.toResponseDTO(customerRepository.save(CustomerMapper.toEntity(existingCustomer, customer)));
     }
 
     public Integer deleteCustomer(Long id) {
+        getCustomerEntityById(id);
         customerRepository.deleteById(id);
         return 1;
     }
     
+    private CustomerEntity getCustomerEntityById(Long id) {
+        return customerRepository.findById(id).orElseThrow(() -> new CustomerException(HttpStatus.NOT_FOUND, "Customer not found"));
+    }
     
 }
