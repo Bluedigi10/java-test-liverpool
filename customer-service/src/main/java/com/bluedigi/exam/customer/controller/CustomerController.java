@@ -1,6 +1,7 @@
 package com.bluedigi.exam.customer.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +49,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
     }
