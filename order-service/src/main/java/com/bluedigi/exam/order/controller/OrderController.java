@@ -8,6 +8,7 @@ import com.bluedigi.exam.order.dto.OrderRequestDTO;
 import com.bluedigi.exam.order.dto.OrderResponseDTO;
 import com.bluedigi.exam.order.service.OrderService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -26,32 +27,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/orders")
 public class OrderController {
     
-    private final OrderService OrderService;
+    private final OrderService orderService;
     
     @GetMapping
     public List<OrderResponseDTO> getAllOrders() {
-        return OrderService.getAllOrders();
+        return orderService.getAllOrders();
     }
     
     @GetMapping("/{id}")
     public OrderResponseDTO getOrderById(@PathVariable Long id) {
-        return OrderService.getOrderById(id);
+        return orderService.getOrderById(id);
     }
 
     @PostMapping
-    public OrderResponseDTO createOrder(@RequestBody OrderRequestDTO request) {
-        return OrderService.createOrder(request);
+    public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO request) {
+        return orderService.createOrder(request);
     }
 
     @PutMapping("/{id}")
-    public OrderResponseDTO updateOrder(@PathVariable Long id, @RequestBody OrderRequestDTO request) {
-        return OrderService.updateOrder(id, request);
+    public OrderResponseDTO updateOrder(@PathVariable Long id, @Valid @RequestBody OrderRequestDTO request) {
+        return orderService.updateOrder(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
-        OrderService.deleteOrder(id);
+        orderService.deleteOrder(id);
     }
 
 }

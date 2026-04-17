@@ -8,6 +8,7 @@ import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
 import com.bluedigi.exam.customer.dto.CustomerResponseDTO;
 import com.bluedigi.exam.customer.service.CustomerService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -39,12 +40,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerResponseDTO createCustomer(@RequestBody CustomerRequestDTO request) {
+    public CustomerResponseDTO createCustomer(@Valid @RequestBody CustomerRequestDTO request) {
         return customerService.createCustomer(request);
     }
 
     @PutMapping("/{id}")
-    public CustomerResponseDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerRequestDTO request) {
+    public CustomerResponseDTO updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerRequestDTO request) {
         return customerService.updateCustomer(id, request);
     }
 
