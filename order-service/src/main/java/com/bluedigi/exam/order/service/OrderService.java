@@ -36,7 +36,7 @@ public class OrderService{
 
     public OrderResponseDTO updateOrder(Long id, OrderRequestDTO order) {
         OrderEntity existingOrder = getOrderByIdEntity(id);
-        // Update the existing order with the new data
+        customerClient.validateCustomerExists(order.getCustomerId());
         return OrderMapper.toResponseDTO(orderRepository.save(OrderMapper.toEntity(existingOrder, order)));
     }
 
