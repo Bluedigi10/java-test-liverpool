@@ -28,6 +28,9 @@ public class CustomerService{
     }
 
     public CustomerResponseDTO createCustomer(CustomerRequestDTO customer) {
+        if (customerRepository.existsByEmail(customer.getEmail())) {
+            throw new CustomerException(HttpStatus.CONFLICT, "Email already exists");
+        }
         return CustomerMapper.toResponseDTO(customerRepository.save(CustomerMapper.toEntity(customer)));
     }
 
