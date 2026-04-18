@@ -36,7 +36,11 @@ public class CustomerService{
 
     public CustomerResponseDTO updateCustomer(Long id, CustomerRequestDTO customer) {
         CustomerEntity existingCustomer = getCustomerEntityById(id);
-        // Update the existing customer with the new data
+        customerRepository.findByEmail(customer.getEmail())
+            .filter(foundCustomer -> !foundCustomer.getCustomerId().equals(id))
+            .ifPresent(foundCustomer -> {
+                throw new CustomerException(HttpStatus.CONFLICT, "Email already exists");
+            });
         return CustomerMapper.toResponseDTO(customerRepository.save(CustomerMapper.toEntity(existingCustomer, customer)));
     }
 
