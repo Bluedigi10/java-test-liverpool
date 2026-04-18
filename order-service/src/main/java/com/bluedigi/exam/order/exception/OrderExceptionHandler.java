@@ -1,0 +1,44 @@
+package com.bluedigi.exam.order.exception;
+
+import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.bluedigi.exam.order.dto.ErrorResponseDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestControllerAdvice
+public class OrderExceptionHandler {
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderException(OrderException ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO();
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(ex.getCode().value());
+        error.setError(HttpStatus.valueOf(ex.getCode().value()).name());
+        error.setMessage(ex.getMessage());
+
+        return ResponseEntity
+                .status(ex.getCode())
+                .body(error);
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request
+    ) {
+        ErrorResponseDTO error = new ErrorResponseDTO();
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        error.setMessage(ex.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(error);
+    }
+}
