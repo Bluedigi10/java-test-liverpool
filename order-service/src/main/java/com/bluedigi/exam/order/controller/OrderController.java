@@ -40,6 +40,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO request) {
         return orderService.createOrder(request);
     }

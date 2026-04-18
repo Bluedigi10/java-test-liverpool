@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.bluedigi.exam.order.client.CustomerClient;
 import com.bluedigi.exam.order.dto.OrderRequestDTO;
 import com.bluedigi.exam.order.dto.OrderResponseDTO;
 import com.bluedigi.exam.order.entity.OrderEntity;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class OrderService{
     private final OrderRepository orderRepository;
+    private final CustomerClient customerClient;
 
     public List<OrderResponseDTO> getAllOrders() {
         return orderRepository.findAll().stream().map(entity -> OrderMapper.toResponseDTO(entity)).toList();
@@ -27,14 +29,15 @@ public class OrderService{
         return OrderMapper.toResponseDTO(getOrderByIdEntity(id));
     }
 
-    public OrderResponseDTO createOrder(OrderRequestDTO customer) {
-        return OrderMapper.toResponseDTO(orderRepository.save(OrderMapper.toEntity(customer)));
+    public OrderResponseDTO createOrder(OrderRequestDTO order) {
+        customerClient.validateCustomerExists(order.getCustomerId());
+        return OrderMapper.toResponseDTO(orderRepository.save(OrderMapper.toEntity(order)));
     }
 
-    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO customer) {
+    public OrderResponseDTO updateOrder(Long id, OrderRequestDTO order) {
         OrderEntity existingOrder = getOrderByIdEntity(id);
         // Update the existing order with the new data
-        return OrderMapper.toResponseDTO(orderRepository.save(OrderMapper.toEntity(existingOrder, customer)));
+        return OrderMapper.toResponseDTO(orderRepository.save(OrderMapper.toEntity(existingOrder, order)));
     }
 
     public void deleteOrder(Long id) {

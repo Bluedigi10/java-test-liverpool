@@ -40,6 +40,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponseDTO createCustomer(@Valid @RequestBody CustomerRequestDTO request) {
         return customerService.createCustomer(request);
     }
