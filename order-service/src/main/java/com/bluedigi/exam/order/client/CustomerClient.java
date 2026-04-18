@@ -24,7 +24,7 @@ public class CustomerClient {
     public void validateCustomerExists(Long customerId){
         try {
             restClient.get()
-                .uri(customerServiceUrl + "/api/customers/{id}", customerId)
+                .uri(customerServiceUrl + "/api/v1/customers/{id}", customerId)
                 .retrieve()
                 .toBodilessEntity();
         } catch (HttpClientErrorException ex) {
