@@ -1,0 +1,277 @@
+{
+  "info": {
+    "_postman_id": "0ebde481-cf2f-4392-b0b3-9e3ecdc9a4e4",
+    "name": "Liverpool-exam",
+    "description": "Colección para probar el proyecto java-test-liverpool.\n\nIncluye pruebas para los microservicios customer-service y order-service a través del api-gateway. Permite validar operaciones CRUD de clientes y órdenes, así como reglas de negocio como email duplicado, customer inexistente al crear una orden y validaciones básicas de datos.\n\nLa colección puede ejecutarse en ambiente local usando Docker Compose o contra el despliegue en Render, cambiando el environment activo en Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33507316"
+  },
+  "item": [
+    {
+      "name": "getCustomers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/customers",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "customers"
+          ]
+        },
+        "description": "Obtiene la lista completa de clientes registrados.\n\nEste request consume el endpoint de customers a través del api-gateway. Debe responder 200 OK y retornar un arreglo JSON con los clientes existentes. Si no hay clientes registrados, retorna un arreglo vacío."
+      },
+      "response": []
+    },
+    {
+      "name": "getCustomersById",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/customers/{{customer}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "customers",
+            "{{customer}}"
+          ]
+        },
+        "description": "Obtiene un cliente específico por su identificador.\n\nEste request utiliza el id configurado en la variable customer del environment activo. Si el cliente existe, responde 200 OK con la información del customer. Si no existe, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "getOrders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/orders",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "orders"
+          ]
+        },
+        "description": "Obtiene la lista completa de órdenes registradas.\n\nEste request consume el endpoint de orders a través del api-gateway. Debe responder 200 OK y retornar un arreglo JSON con las órdenes existentes. Si no hay órdenes registradas, retorna un arreglo vacío."
+      },
+      "response": []
+    },
+    {
+      "name": "getOrdersById",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/orders/{{order}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "orders",
+            "{{order}}"
+          ]
+        },
+        "description": "Obtiene una orden específica por su identificador.\n\nEste request utiliza el id configurado en la variable order del environment activo. Si la orden existe, responde 200 OK con la información de la orden. Si no existe, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "createCustomer",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"firstName\": \"emma\",\r\n  \"middleName\": \"david\",\r\n  \"paternalLastName\": \"vidal\",\r\n  \"maternalLastName\": \"vidal\",\r\n  \"email\": \"prueba@example.com\",\r\n  \"shippingAddress\": \"campeche\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/customers",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "customers"
+          ]
+        },
+        "description": "Crea un nuevo cliente.\n\nEl body debe incluir los datos requeridos del customer: firstName, paternalLastName, maternalLastName, email y shippingAddress. Si la creación es exitosa, responde 201 Created. Si el email ya existe, responde 409 Conflict. Si algún dato requerido es inválido, responde 400 Bad Request."
+      },
+      "response": []
+    },
+    {
+      "name": "createOrder",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"productCode\": \"124\",\r\n  \"customerId\": {{customer}},\r\n  \"quantity\": 5,\r\n  \"price\": 0.01\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/orders",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "orders"
+          ]
+        },
+        "description": "Crea una nueva orden asociada a un customer existente.\n\nEl body debe incluir productCode, customerId, quantity y price. Antes de crear la orden, order-service valida que el customerId exista en customer-service. Si la creación es exitosa, responde 201 Created. Si el customer no existe, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "updateCustomer",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"firstName\": \"david\",\r\n  \"middleName\": \"victor\",\r\n  \"paternalLastName\": \"martinez\",\r\n  \"maternalLastName\": \"martinez\",\r\n  \"email\": \"usuario@example.com\",\r\n  \"shippingAddress\": \"campeche\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/customers/{{customer}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "customers",
+            "{{customer}}"
+          ]
+        },
+        "description": "Actualiza la información de un cliente existente.\n\nEste request utiliza el id configurado en la variable customer del environment activo. Permite modificar los datos del cliente. Si el cliente existe, responde 200 OK con la información actualizada. Si el email pertenece a otro cliente, responde 409 Conflict. Si el cliente no existe, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "updateOrder",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"productCode\": \"123\",\r\n  \"customerId\": {{customer}},\r\n  \"quantity\": 3,\r\n  \"price\": 0.01\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/orders/{{order}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "orders",
+            "{{order}}"
+          ]
+        },
+        "description": "Actualiza una orden existente.\n\nEste request utiliza el id configurado en la variable order del environment activo. Permite modificar productCode, customerId, quantity y price. Antes de actualizar, order-service valida que el customerId exista en customer-service. Si la orden existe y el customer es válido, responde 200 OK. Si la orden o el customer no existen, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "deleteOrder",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/orders/{{order}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "orders",
+            "{{order}}"
+          ]
+        },
+        "description": "Elimina una orden existente por su identificador.\n\nEste request utiliza el id configurado en la variable order del environment activo. Si la orden existe, responde 204 No Content. Si la orden no existe, responde 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "deleteCustomer",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{apiGatewayUrl}}/{{path}}/customers/{{customer}}",
+          "host": [
+            "{{apiGatewayUrl}}"
+          ],
+          "path": [
+            "{{path}}",
+            "customers",
+            "{{customer}}"
+          ]
+        },
+        "description": "Elimina un cliente existente por su identificador.\n\nEste request utiliza el id configurado en la variable customer del environment activo. Si el cliente existe, responde 204 No Content. Si el cliente no existe, responde 404 Not Found."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "customer",
+      "value": "5"
+    },
+    {
+      "key": "order",
+      "value": "5"
+    }
+  ]
+}

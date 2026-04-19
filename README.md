@@ -135,6 +135,11 @@ Si también quieres eliminar los volúmenes de base de datos:
 docker compose down -v
 ```
 
+Si desea eliminar todo (volumenes e imagenes)
+```bash
+docker compose down --rmi local -v
+```
+
 ## URLs Locales
 
 Usando API Gateway:
@@ -392,23 +397,20 @@ https://java-test-liverpool-1.onrender.com/swagger-ui/index.html
 
 ## Postman
 
-Se recomienda usar una colección de Postman para probar el proyecto tanto en local como en Render.
+La colección de Postman se encuentra en la carpeta `postman/`.
 
-Variables sugeridas:
+Archivos incluidos:
 
-| Variable | Local | Render |
-|---|---|---|
-| `apiGatewayUrl` | `http://localhost:8080` | `https://liverpool-gateway.onrender.com` |
-| `path` | `api/v1` | `api/v1` |
+- `Liverpool-exam.postman_collection.json`
+- `local.postman_environment.json`
+- `render.postman_environment.json`
 
-Ejemplos de URLs en Postman:
+Para probar el proyecto:
 
-```text
-{{apiGatewayUrl}}/{{path}}/customers
-{{apiGatewayUrl}}/{{path}}/customers/1
-{{apiGatewayUrl}}/{{path}}/orders
-{{apiGatewayUrl}}/{{path}}/orders/1
-```
+1. Importar la colección en Postman.
+2. Importar el environment `local` o `render`.
+3. Seleccionar el environment correspondiente.
+4. Ejecutar los requests desde la colección.
 
 Pruebas recomendadas:
 

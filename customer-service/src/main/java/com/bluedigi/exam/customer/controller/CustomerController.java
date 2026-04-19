@@ -8,6 +8,8 @@ import com.bluedigi.exam.customer.dto.CustomerRequestDTO;
 import com.bluedigi.exam.customer.dto.CustomerResponseDTO;
 import com.bluedigi.exam.customer.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -25,32 +27,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/customers")
+@Tag(name = "Customers", description = "Customer management endpoints")
 public class CustomerController {
     
     private final CustomerService customerService;
     
     @GetMapping
+    @Operation(
+        summary = "Get all customers",
+        description = "Returns the list of registered customers."
+    )
     public List<CustomerResponseDTO> getAllCustomers() {
         return customerService.getAllCustomers();
     }
     
     @GetMapping("/{id}")
+    @Operation(
+        summary = "Get customer by ID",
+        description = "Returns a customer based on their ID."
+    )
     public CustomerResponseDTO getCustomerById(@PathVariable Long id) {
         return customerService.getCustomerById(id);
     }
 
     @PostMapping
+    @Operation(
+        summary = "Create customer",
+        description = "Creates a new customer."
+    )
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponseDTO createCustomer(@Valid @RequestBody CustomerRequestDTO request) {
         return customerService.createCustomer(request);
     }
 
     @PutMapping("/{id}")
+    @Operation(
+        summary = "Update customer",
+        description = "Updates an existing customer."
+    )
     public CustomerResponseDTO updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerRequestDTO request) {
         return customerService.updateCustomer(id, request);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+        summary = "Delete customer",
+        description = "Deletes a customer based on their ID."
+    )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
