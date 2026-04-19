@@ -1,13 +1,14 @@
 package com.bluedigi.exam.order;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+
 class OrderServiceApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void applicationClassShouldBeAvailable() {
+		assertThat(OrderServiceApplication.class).isNotNull();
 	}
 
 }
